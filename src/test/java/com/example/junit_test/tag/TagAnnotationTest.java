@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
     테스트 클래스, 메소드에 테스트 구분을 태깅하기 위해 사용
  */
 
-@Tag("fast")
 public class TagAnnotationTest {
 
     @Test
