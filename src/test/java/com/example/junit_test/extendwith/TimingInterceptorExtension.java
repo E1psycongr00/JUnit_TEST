@@ -1,4 +1,4 @@
-package extendwith;
+package com.example.junit_test.extendwith;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
