@@ -27,6 +27,7 @@ public class JunitLifeCycleTest {
     @Test
     @Order(2) // 처음 실행되는 메서드
     public void 자원공유테스트2() {
+        // org.assertj.core.api.Assertions의 장점은 비교를 메서드 체이닝 형태로 사용 할 수 있음.
         assertThat(count)
                 .isGreaterThan(1)
                 .isLessThan(10);
