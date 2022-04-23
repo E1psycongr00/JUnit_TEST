@@ -1,5 +1,6 @@
 package com.example.junit_test.extendwith;
 
+import com.example.junit_test.extendwith.extension.TimingInterceptorExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
