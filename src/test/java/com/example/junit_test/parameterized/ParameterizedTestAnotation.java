@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParameterizedTestAnotation {
 
-    // 지원 타입 : short[], byte[], int[], long[], float[], double[], char[], boolean[], String[], Class<?>[]
-    @ParameterizedTest
-    @ValueSource(ints={1,2,3})
-    void testWithValueSource(int intArg) {
-        assertTrue(intArg > 0 && intArg < 4);
-    }
+        // 지원 타입 : short[], byte[], int[], long[], float[], double[], char[], boolean[], String[], Class<?>[]
+        @ParameterizedTest
+        @ValueSource(ints={1,2,3})
+        void testWithValueSource(int intArg) {
+            assertTrue(intArg > 0 && intArg < 4);
+        }
 
     // test 메서드 매개변수가 1개 일 때 사용 가능
     // primitive 타입은 null을 가질 수 없으므로 box형태나 클래스만 가능

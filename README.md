@@ -102,4 +102,145 @@ RepetitionInfo는
 getTotalRepetitions()로 전체 반복 횟수
 getCurrentRepetition()로 현재 반복 수
 또는 반복 테스트를 커스터마이징 해서 사용 할 수 있다.
+
+
+
+
+## @ParameterizedTest
+지원 타입 : short[], byte[], int[], long[], float[], double[], char[], boolean[], String[], Class<?>[]
+
+### @ValueSource(ints={1,2,3.....})
+배열로 정의한 여러 값을 하나의 매개변수에서 모두 테스트 해볼 때 사용한다.
+
+```java
+// 지원 타입 : short[], byte[], int[], long[], float[], double[], char[], boolean[], String[], Class<?>[]
+@ParameterizedTest
+@ValueSource(ints={1,2,3})
+void testWithValueSource(int intArg) {
+assertTrue(intArg > 0 && intArg < 4);
+}
+```
+### @NullSource
+```java
+
+@ParameterizedTest
+@NullSource
+void testWithNullSource(Integer intArg) {
+assertTrue(intArg == null);
+}
+```
+### @EnumSource(value= *.class)
+```java
+
+// 해당하는 enum의 모든 값을 검사함
+@ParameterizedTest
+@EnumSource(value= Month.class)
+void testWithEnumSource(Month month) {
+
+}
+```
+
+
+```java
+// enum name이 "May" 인 것만 검사
+@ParameterizedTest
+@EnumSource(mode= EnumSource.Mode.INCLUDE, names={"MAY"})
+void testWithEnumSourceInclude(Month month) {
+
+}
+
+// enum name이 "May"가 아닌 것만 검사
+@ParameterizedTest
+@EnumSource(mode= EnumSource.Mode.EXCLUDE, names={"MAY", "MARCH"})
+void testWithEnumSourceExclude(Month month) {
+
+}
+```
+Enum에서 EXCLUDE는 name 목록에 있는 것을 제외한 나머지 케이스를 테스트한다.
+
+INCLUDE는 enum 목록에서 Name 목록만 테스트 케이스로 활용
+
+
+### @CsvSource
+```java
+@ParameterizedTest
+@CsvSource(value= {
+"apple, 1",
+"banana, 2",
+"'lemon, lime', 0xF1",
+"'', 10"
+}, delimiter = ',', emptyValue = "1") // emptyValue= 빈값을 지정 값으로 바꿈
+void testWithCsvSource(String fruit, int rank) {
+assertNotNull(fruit);
+assertNotEquals(0, rank);
+}
+
+@ParameterizedTest
+@CsvSource(value= {
+"apple, NL",
+}, nullValues = {"NL", "apple"}) // NL apple 을 null값으로 바꿈
+void testWithCsvSource2(String fruit, Integer rank) {
+assertNull(fruit);
+assertNull(rank);
+}
+```
+","로 구분해서 여러 파라미터에 동시에 값을 넣는게 가능하다. 쉽고 직관적인 방법으로 multiparameter를 설정 할 수 있다는 장점이 있다.
+
+
+
+### @CsvFileSource
+```java
+// numLinesToSkip은 보통 csv 첫번째는 column 정보가 헤더로 들어가기 때문에 첫번째를 스킵한다.
+@ParameterizedTest
+@CsvFileSource(resources = "/two-column.csv", numLinesToSkip = 1)
+void testCsvFileSourceResource(String country, int reference) {
+
+}
+```
+csv 파일을 불러서 사용 가능하다. test 에 resource 를 만들면 위와 같은 경로로도 사용가능하다.
+
+
+
+### @MethodSource
+```java
+static Stream<String> testWithDefaultLocalMethodSource() {
+return Stream.of("apple", "pen");
+}
+
+// 메소드가 같으면 명시된 static 메소드를 자동으로 가져 올 수 있다.
+@ParameterizedTest
+@MethodSource
+void testWithDefaultLocalMethodSource(String argument) {
+assertNotNull(argument);
+}
+
+// 메소드를 가져오려면 @MethodSource에 static 메소드명을 직접 기입해준다.
+@ParameterizedTest
+@MethodSource("testWithDefaultLocalMethodSource")
+void testWithDefaultLocalMethodSource2(String argument) {
+assertNotNull(argument);
+}
+```
+static으로 선언해서 사용한다. 스태틱 메소드로 정의한 메소드 네임을 어노테이션 변수로 넣어주면 여러 파라미터에 대해서 테스트한다. 주로 중복된 테스트 케이스의 경우 사용 할 듯 하다.
+
+
+```java
+@ParameterizedTest
+@MethodSource("stringIntAndListProvider")
+void testWithMultiArgMethodSource(String str, int num, List<String> list) {
+assertEquals(5, str.length());
+assertTrue(num >=1 && num <=2);
+assertEquals(2, list.size());
+}
+
+// MethodSource를 이용해서 멀티 파라미터를 사용하려면 Arguments를 활용한다.
+// org.junit.jupiter.params.provider.Arguments;
+static Stream<Arguments> stringIntAndListProvider() {
+return Stream.of(
+Arguments.arguments("apple",1, Arrays.asList("a", "b")),
+Arguments.arguments("lemon",2, Arrays.asList("x", "y"))
+);
+}
+MultiParamter의 경우 Arguments라는 객체를 활용한다.
+```
 </details>
