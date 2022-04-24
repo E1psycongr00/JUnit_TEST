@@ -69,4 +69,37 @@
 - 매개변수를 지정해주지 않으면 @Controller, @RestController, @RestControllerAdvice 등 컨트롤러와 연관된 bean을 로드함
 - 스프링의 모든 Bean을 로드하는 @SpringBootTest대신 컨트롤러 관련 코드만 테스트 할 경우 사용됨(SpringBootTest보다 상대적으로 가볍다.)
 </div>
+
+## @RepeatedTest
+```java
+public class RepeatedAnnotationTest {
+
+    // 5번 반복
+    @RepeatedTest(5)
+    void repeated1(RepetitionInfo repetitionInfo) {
+        Assertions.assertEquals(5, repetitionInfo.getTotalRepetitions());
+    }
+
+    /*
+        1. displayName => @DisplayName
+        2. currentRepetition => 현재 반복수
+        3. totalRepetitions => total 반복수
+     */
+    @RepeatedTest(value=5, name="{displayName} {currentRepetition}/{totalRepetitions}")
+    @DisplayName("Repeat!..")
+    void customDisplayName(TestInfo testInfo) {
+        Assertions.assertEquals("Repeat!.. 1/5", testInfo.getDisplayName());
+    }
+
+
+}
+```
+
+어떤 테스트를 반복해서 테스트 할 때 사용한다.
+
+RepetitionInfo는
+
+getTotalRepetitions()로 전체 반복 횟수
+getCurrentRepetition()로 현재 반복 수
+또는 반복 테스트를 커스터마이징 해서 사용 할 수 있다.
 </details>
